@@ -11,10 +11,13 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not set');
 }
 
-// Enable SSL for production (Supabase/Render)
+// Enable SSL and pooling settings for production (Supabase/Render)
 const client = postgres(connectionString, {
   ssl: 'require',
-  prepare: false // Recommended for serverless/pooled connections
+  prepare: false, // MANDATORY for Supabase Transaction Pooler
+  max: 1,         // Limit connections to avoid "too many clients" error on free tier
+  idle_timeout: 20,
+  connect_timeout: 10
 });
 
 export const db = drizzle(client, { schema });
