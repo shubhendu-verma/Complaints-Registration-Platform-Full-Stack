@@ -5,21 +5,26 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+let db, client;
+
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error('DATABASE_URL is not set');
+  console.error('⚠️ CRITICAL: DATABASE_URL is not set in environment variables');
+} else {
+  try {
+    client = postgres(connectionString, {
+      ssl: 'require',
+      prepare: false, 
+      max: 10,
+      idle_timeout: 30,
+      connect_timeout: 30
+    });
+    db = drizzle(client, { schema });
+    console.log('✅ Database client initialized');
+  } catch (err) {
+    console.error('❌ Database initialization failed:', err.message);
+  }
 }
 
-// Enable SSL and pooling settings for production (Supabase/Render)
-const client = postgres(connectionString, {
-  ssl: 'require',
-  prepare: false, 
-  max: 10,
-  idle_timeout: 30,
-  connect_timeout: 30, // Increased
-  onnotice: () => {}   // Ignore notices
-});
-
-export const db = drizzle(client, { schema });
-export { client };
+export { db, client };
