@@ -32,23 +32,31 @@ app.use('/api/admin', adminRouter);
 app.get('/', async (req, res) => {
   try {
     const { client } = await import('./db/index.js');
-    const tables = await client`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
     
     const url = process.env.DATABASE_URL || 'NOT SET';
     const maskedUrl = url.replace(/\/\/.*@/, '//****:****@'); // Hide password
     
+    // Check if client is actually a function before calling
+    let tableNames = [];
+    if (typeof client === 'function') {
+      const tables = await client`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
+      tableNames = tables.map(t => t.table_name);
+    }
+
     res.json({
       message: 'Complaints Registration API is running',
-      version: '1.4.0',
-      db_connected: true,
-      tables: tables.map(t => t.table_name),
-      using_url: maskedUrl
+      version: '1.5.0',
+      db_connected: typeof client === 'function',
+      using_url: maskedUrl,
+      env_keys: Object.keys(process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET')),
+      tables: tableNames
     });
   } catch (err) {
     res.json({
       message: 'API running but DB error',
-      version: '1.3.0',
+      version: '1.5.0',
       db_connected: false,
+      env_keys: Object.keys(process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET')),
       error: err.message
     });
   }
