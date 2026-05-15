@@ -30,7 +30,11 @@ app.use('/api/admin', adminRouter);
 
 // Health check
 app.get('/', (req, res) => {
-  res.send('Complaints Registration API is running');
+  res.json({
+    message: 'Complaints Registration API is running',
+    version: '1.2.0',
+    db_connected: !!process.env.DATABASE_URL
+  });
 });
 
 // Start Server
