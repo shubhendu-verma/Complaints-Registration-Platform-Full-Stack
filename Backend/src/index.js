@@ -14,21 +14,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Explicitly allow localhost and GitHub Pages domain
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-      'https://shubhendu-verma.github.io'
-    ];
-
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.github.io')) {
-      callback(null, true);
-    } else {
-      callback(null, true); // Still allowing others but ensuring we handle the logic
-    }
+    // Simply reflect the origin back to allow it
+    callback(null, true);
   },
   credentials: true
 }));

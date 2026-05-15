@@ -48,7 +48,13 @@ router.post('/login', async (req, res) => {
     const user = userResult[0];
 
     if (!user || user.password !== password) {
+      console.log('Login failed: Invalid credentials for', email);
       return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET is missing in environment variables');
+      return res.status(500).json({ error: 'Server configuration error' });
     }
 
     const token = jwt.sign(
@@ -66,14 +72,15 @@ router.post('/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000
     });
 
+    console.log('Login successful for', email);
     res.json({
       name: user.name,
       email: user.email,
       role: user.role
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    console.error('Login error details:', error);
+    res.status(500).json({ error: 'Login failed: ' + error.message });
   }
 });
 
