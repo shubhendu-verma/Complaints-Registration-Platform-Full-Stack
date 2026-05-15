@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Police Feedback Portal | उत्तर प्रदेश पुलिस फीडबैक पोर्टल</title>
+    <meta name="description" content="Official Feedback Portal for Uttar Pradesh Police. Provide your feedback and help us serve you better.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="logo.png" alt="UP Police Logo" class="police-logo">
+            <div class="header-title">
+                <h1 id="main-title">उत्तर प्रदेश पुलिस फीडबैक पोर्टल</h1>
+                <p style="font-size: 0.9rem; color: #666; font-weight: 500;">Uttar Pradesh Police Feedback Portal</p>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="lang-switch">
+                <button onclick="toggleLanguage()">English / हिन्दी</button>
+            </div>
+            <nav id="main-nav" style="display: none;">
+                <div class="nav-links">
+                    <span id="nav-new-feedback" onclick="showSection('submit-complaint-section')">New Feedback</span>
+                    <span id="nav-my-feedback" onclick="showSection('my-feedback')">My Feedback</span>
+                    <span id="nav-admin-dashboard" onclick="showSection('admin-dashboard')" style="display: none;">Admin</span>
+                    <span id="logout-btn" onclick="handleLogout()">Logout</span>
+                    <div class="user-info" id="user-display" style="font-weight: 700; color: var(--police-blue);"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 0. Welcome/Landing Page -->
+        <section id="welcome-section" class="active">
+            <div class="hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h2 id="hero-title">जनता की सेवा में सदैव तत्पर</h2>
+                    <p id="hero-desc">आपकी प्रतिक्रिया हमारे लिए महत्वपूर्ण है। कृपया अपनी शिकायतें या सुझाव यहाँ दर्ज करें ताकि हम अपनी सेवाओं को और बेहतर बना सकें।</p>
+                    <div class="hero-btns">
+                        <button onclick="showSection('register-section')" style="width: auto; padding: 1rem 2rem;">फीडबैक दें (Give Feedback)</button>
+                        <button onclick="showSection('login-section')" class="secondary" style="width: auto; padding: 1rem 2rem;">लॉगिन (Login)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wide-container glass-panel" style="margin-top: -30px; text-align: center; padding: 3rem;">
+                <div class="watermark"></div>
+                <h3 style="color: var(--police-blue); margin-bottom: 1rem;">सिस्टम के बारे में जानकारी (About System)</h3>
+                <p style="max-width: 800px; margin: 0 auto; color: #555;">यह पोर्टल नागरिकों को उत्तर प्रदेश पुलिस के साथ सीधे जुड़ने और अपनी समस्याओं को दर्ज करने की सुविधा देता है। AI की मदद से हम आपकी शिकायतों को बेहतर ढंग से समझने और त्वरित समाधान करने का प्रयास करते हैं।</p>
+            </div>
+        </section>
+
+        <!-- 1. Register Page -->
+        <section id="register-section">
+            <div class="container glass-panel">
+                <div class="watermark"></div>
+                <h1 class="mb-4" id="reg-title">नया खाता बनाएँ (Register)</h1>
+                <div id="register-msg" class="message"></div>
+                
+                <div id="reg-form">
+                    <div class="form-group">
+                        <label for="reg-name" id="lbl-name">पूरा नाम (Full Name)</label>
+                        <input type="text" id="reg-name" placeholder="आपका नाम">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email" id="lbl-email">ईमेल (Email)</label>
+                        <input type="email" id="reg-email" placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password" id="lbl-pass">पासवर्ड (Password)</label>
+                        <input type="password" id="reg-password" placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-confirm-password" id="lbl-confirm">पासवर्ड की पुष्टि (Confirm)</label>
+                        <input type="password" id="reg-confirm-password" placeholder="••••••••">
+                    </div>
+                    <button onclick="register()">रजिस्टर करें (Register)</button>
+                </div>
+
+                <p class="auth-switch" style="margin-top: 1.5rem; text-align: center;">पहले से खाता है? <span onclick="showSection('login-section')">Login</span></p>
+                <p class="auth-switch" style="text-align: center;"><span onclick="showSection('welcome-section')">वापस जाएँ (Back to Home)</span></p>
+            </div>
+        </section>
+
+        <!-- 2. Login Page -->
+        <section id="login-section">
+            <div class="container glass-panel">
+                <div class="watermark"></div>
+                <h1 id="login-title">लॉगिन (Login)</h1>
+                <div id="login-msg" class="message"></div>
+                <div class="form-group">
+                    <label for="login-email">ईमेल (Email)</label>
+                    <input type="email" id="login-email" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">पासवर्ड (Password)</label>
+                    <input type="password" id="login-password" placeholder="••••••••">
+                </div>
+                <button onclick="handleLogin()">लॉगिन करें (Login)</button>
+                <p class="auth-switch" style="margin-top: 1.5rem; text-align: center;">खाता नहीं है? <span onclick="showSection('register-section')">Register</span></p>
+                <p class="auth-switch" style="text-align: center;"><span onclick="showSection('welcome-section')">वापस जाएँ (Back to Home)</span></p>
+            </div>
+        </section>
+
+        <!-- 3. Feedback Submission Page -->
+        <section id="submit-complaint-section">
+            <div class="container glass-panel">
+                <div class="heritage-bg"></div>
+                <div class="watermark"></div>
+                <h1>फीडबैक दर्ज करें (Feedback Form)</h1>
+                <div id="submit-msg" class="message"></div>
+                
+                <div id="feedback-form">
+                    <div class="form-group">
+                        <label>आपका जिला (YOUR DISTRICT)</label>
+                        <input type="text" id="district" placeholder="जैसे: Lucknow, Kanpur, Varanasi...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>आपका थाना (YOUR POLICE STATION)</label>
+                        <input type="text" id="police_station" placeholder="थाने का नाम लिखें...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>सेवा का प्रकार चुनें (Select Service)</label>
+                        <select id="service_type">
+                            <option value="">-- चुनें (Select) --</option>
+                            <option value="Police Station Visit">थाना दौरा (Police Station Visit)</option>
+                            <option value="UP 112 Service">112 आपातकालीन सेवा (UP 112 Service)</option>
+                            <option value="Character Verification">चरित्र प्रमाण पत्र (Character Verification)</option>
+                            <option value="Passport Verification">पासपोर्ट वेरिफिकेशन (Passport Verification)</option>
+                            <option value="FIR/Complaint Registration">FIR/शिकायत पंजीकरण (FIR/Complaint)</option>
+                        </select>
+                    </div>
+
+                    <div class="rating-group" style="margin-bottom: 2rem;">
+                        <label>व्यवहार: पुलिस कर्मियों का व्यवहार कैसा था? (Behavior)</label>
+                        <div class="stars" data-rating-id="rating_behavior">
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                    </div>
+
+                    <div class="rating-group" style="margin-bottom: 2rem;">
+                        <label>समय: क्या आपका काम समय पर हुआ? (Time)</label>
+                        <div class="stars" data-rating-id="rating_time">
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                    </div>
+
+                    <div class="rating-group" style="margin-bottom: 2rem;">
+                        <label>स्वच्छता/सुविधा: वातावरण कैसा था? (Cleanliness)</label>
+                        <div class="stars" data-rating-id="rating_cleanliness">
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>क्या आपसे किसी अतिरिक्त पैसे की मांग की गई? (Corruption Free?)</label>
+                        <div style="display: flex; gap: 2rem;">
+                            <label style="font-weight: 400;"><input type="radio" name="corruption" value="true" checked> नहीं (No)</label>
+                            <label style="font-weight: 400;"><input type="radio" name="corruption" value="false"> हाँ (Yes)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="complaint-text">अपनी राय विस्तार में लिखें (Detailed Opinion)</label>
+                        <textarea id="complaint-text" rows="4" placeholder="यहाँ विस्तार से लिखें..."></textarea>
+                    </div>
+
+                    <button onclick="submitFeedback()">Submit Feedback</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. My Feedback Page -->
+        <section id="my-feedback-section" class="wide-container">
+            <div class="glass-panel main-panel" style="padding: 2.5rem;">
+                <div class="heritage-bg"></div>
+                <div class="watermark"></div>
+                <div class="section-header">
+                    <h1 id="my-feedback-title">मेरा फीडबैक (My Feedback)</h1>
+                    <button class="new-feedback-btn" onclick="showSection('submit-complaint-section')">नया फीडबैक (New Feedback)</button>
+                </div>
+                <div id="my-complaints-list" class="feedback-list-container">
+                    <!-- Feedback loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Admin Dashboard -->
+        <section id="admin-dashboard-section" class="wide-container">
+            <div class="glass-panel" style="padding: 2.5rem;">
+                <div class="heritage-bg"></div>
+                <div class="watermark"></div>
+                <h1 class="mb-8" style="position: relative; z-index: 10;">प्रशासक डैशबोर्ड (Admin Dashboard)</h1>
+                <div id="admin-complaints-list" style="margin-top: 2rem; position: relative; z-index: 10;">
+                    <!-- All complaints loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Thank You Modal -->
+    <div id="thank-you-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="glass-panel" style="background: white; padding: 3rem; text-align: center; max-width: 400px; border-radius: 20px;">
+            <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981; margin-bottom: 1rem;"></i>
+            <h2 style="color: var(--police-blue);">धन्यवाद! (Thank You)</h2>
+            <p style="margin: 1rem 0 2rem;">आपकी प्रतिक्रिया हमारे लिए बहुत महत्वपूर्ण है।</p>
+            <button onclick="closeThankYou()">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
