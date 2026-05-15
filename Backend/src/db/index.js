@@ -14,10 +14,10 @@ if (!connectionString) {
 // Enable SSL and pooling settings for production (Supabase/Render)
 const client = postgres(connectionString, {
   ssl: 'require',
-  prepare: false, // MANDATORY for Supabase Transaction Pooler
-  max: 1,         // Limit connections to avoid "too many clients" error on free tier
-  idle_timeout: 20,
-  connect_timeout: 10
+  prepare: false, 
+  max: 10,         // Increased from 1
+  idle_timeout: 30,
+  connect_timeout: 20
 });
 
 export const db = drizzle(client, { schema });

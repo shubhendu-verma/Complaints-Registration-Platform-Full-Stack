@@ -29,12 +29,25 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/admin', adminRouter);
 
 // Health check
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Complaints Registration API is running',
-    version: '1.2.0',
-    db_connected: !!process.env.DATABASE_URL
-  });
+app.get('/', async (req, res) => {
+  try {
+    const { client } = await import('./db/index.js');
+    const tables = await client`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
+    
+    res.json({
+      message: 'Complaints Registration API is running',
+      version: '1.3.0',
+      db_connected: true,
+      tables: tables.map(t => t.table_name)
+    });
+  } catch (err) {
+    res.json({
+      message: 'API running but DB error',
+      version: '1.3.0',
+      db_connected: false,
+      error: err.message
+    });
+  }
 });
 
 // Start Server
