@@ -80,7 +80,9 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error details:', error);
-    res.status(500).json({ error: 'Login failed: ' + error.message });
+    // Return more specific error information if available
+    const detail = error.detail || error.message || 'Unknown database error';
+    res.status(500).json({ error: 'Login failed: ' + detail });
   }
 });
 
