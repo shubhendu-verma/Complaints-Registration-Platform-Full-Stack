@@ -57,11 +57,11 @@ router.post('/login', async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // Set cookie - Using more standard settings for local cross-origin
+    // Set cookie - Standard settings for production cross-origin hosting
     res.cookie('token', token, {
-      httpOnly: true, // More secure, still works with credentials: 'include'
-      secure: false, // Must be false for local HTTP
-      sameSite: 'lax', // Works for localhost on different ports
+      httpOnly: true,
+      secure: true,   // Required for cross-site cookies
+      sameSite: 'none', // Required for cross-site cookies (GitHub -> Render)
       path: '/',
       maxAge: 24 * 60 * 60 * 1000
     });
