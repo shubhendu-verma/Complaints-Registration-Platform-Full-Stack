@@ -34,11 +34,15 @@ app.get('/', async (req, res) => {
     const { client } = await import('./db/index.js');
     const tables = await client`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
     
+    const url = process.env.DATABASE_URL || 'NOT SET';
+    const maskedUrl = url.replace(/\/\/.*@/, '//****:****@'); // Hide password
+    
     res.json({
       message: 'Complaints Registration API is running',
-      version: '1.3.0',
+      version: '1.4.0',
       db_connected: true,
-      tables: tables.map(t => t.table_name)
+      tables: tables.map(t => t.table_name),
+      using_url: maskedUrl
     });
   } catch (err) {
     res.json({
