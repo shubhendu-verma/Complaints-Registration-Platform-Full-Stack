@@ -11,6 +11,11 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not set');
 }
 
-const client = postgres(connectionString);
+// Enable SSL for production (Supabase/Render)
+const client = postgres(connectionString, {
+  ssl: 'require',
+  prepare: false // Recommended for serverless/pooled connections
+});
+
 export const db = drizzle(client, { schema });
 export { client };
