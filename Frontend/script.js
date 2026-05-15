@@ -1,7 +1,7 @@
 /**
  * CONFIGURATION
  */
-const BACKEND_BASE_URL = 'http://127.0.0.1:3000';
+const BACKEND_BASE_URL = 'https://complaints-registration-platform-full-oyxq.onrender.com';
 const API_BASE = `${BACKEND_BASE_URL}/api`;
 
 let currentUser = null;
@@ -21,7 +21,7 @@ function showSection(sectionId) {
         target.classList.add('active');
         window.scrollTo(0, 0);
     }
-    
+
     // Refresh data if needed
     if (sectionId === 'my-complaints') fetchMyComplaints();
     if (sectionId === 'admin-dashboard') fetchAdminComplaints();
@@ -52,7 +52,7 @@ function toggleLanguage() {
             heroDesc: "Your feedback is valuable to us. Please register your complaints or suggestions here so we can improve our services."
         }
     };
-    
+
     document.getElementById('main-title').innerText = translations[currentLang].title;
     document.getElementById('hero-title').innerText = translations[currentLang].heroTitle;
     document.getElementById('hero-desc').innerText = translations[currentLang].heroDesc;
@@ -63,7 +63,7 @@ async function checkSession() {
     try {
         const res = await fetch(`${API_BASE}/auth/me`, { credentials: 'include' });
         const data = await res.json();
-        
+
         if (data.loggedIn) {
             currentUser = data;
             onLoginSuccess();
@@ -79,7 +79,7 @@ async function checkSession() {
 function onLoginSuccess() {
     document.getElementById('main-nav').style.display = 'flex';
     document.getElementById('user-display').innerText = `${currentUser.name} (${currentUser.role})`;
-    
+
     if (currentUser.role === 'admin') {
         document.getElementById('nav-admin-dashboard').style.display = 'inline';
         showSection('admin-dashboard');
@@ -128,7 +128,7 @@ async function handleLogin() {
             body: JSON.stringify({ email, password }),
             credentials: 'include'
         });
-        
+
         if (res.ok) {
             const data = await res.json();
             currentUser = { ...data, loggedIn: true };
@@ -160,9 +160,9 @@ document.addEventListener('click', (e) => {
         const container = star.parentElement;
         const ratingId = container.dataset.ratingId;
         const value = parseInt(star.dataset.value);
-        
+
         ratings[ratingId] = value;
-        
+
         // Update UI
         Array.from(container.children).forEach(child => {
             const val = parseInt(child.dataset.value);
@@ -193,7 +193,7 @@ async function submitFeedback() {
         const res = await fetch(`${API_BASE}/complaints`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 district,
                 police_station,
                 service_type,
@@ -201,11 +201,11 @@ async function submitFeedback() {
                 rating_time: ratings.rating_time,
                 rating_cleanliness: ratings.rating_cleanliness,
                 is_corruption_free: corruption_val,
-                complaint_text 
+                complaint_text
             }),
             credentials: 'include'
         });
-        
+
         if (res.ok) {
             document.getElementById('thank-you-modal').style.display = 'flex';
         } else {
